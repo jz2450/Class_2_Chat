@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="/css/style.css">
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+			
+			var messageParent = document.getElementById('messages');
+
+			function newMessageInChat(data) {
+				let msgFontSize = data.length;
+				let latestMessage = document.getElementsByClassName('chatlog')[0];
+				let newDiv = document.createElement("div");
+				let newMessage = document.createTextNode(data);
+				newDiv.style.fontSize = msgFontSize+"px";
+				newDiv.appendChild(newMessage);
+				newDiv.classList.add("chatlog");
+				document.body.insertBefore(newDiv, latestMessage);
+			}
+
+			var socket = io.connect();
+			
+			socket.on('connect', function() {
+				console.log("Connected");
+			});
+
+			// Receive from any event
+			socket.on('chatmessage', function (data) {
+				console.log(data);
+				newMessageInChat(data);
+				// document.getElementById('messages').innerHTML = "" + data + "" + document.getElementById('messages').innerHTML;
+			});
+			
+			var sendmessage = function(message) {
+				console.log("chatmessage: " + message);
+				socket.emit('chatmessage', message);
+				document.getElementById('message').value = "";
+			};
+
+			window.addEventListener('load', setup);
+				function setup() {
+				// https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+				// Get the input field
+				var input = document.getElementById("message");
+
+				// Execute a function when the user presses a key on the keyboard
+				input.addEventListener("keypress", function(event) {
+				// If the user presses the "Enter" key on the keyboard
+				if (event.key === "Enter") {
+					// Cancel the default action, if needed
+					event.preventDefault();
+					// Trigger the button element with a click
+					document.getElementById("sendChat").click();
+				}
+				});
+			}
+		</script>	
+	</head>
+ <body>
+<input type="text" id="message" name="message" placeholder="type in your intellectual message here (the longer the louder)">
+ <input type="submit" id="sendChat" value="submit" onclick="sendmessage(document.getElementById('message').value);">
+ <div class="chatlog" id="messages">
+ No Messages Yet
+ </div>
+ 
+ </body>
+</html>
