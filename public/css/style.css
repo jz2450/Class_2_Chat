@@ -1,9 +1,7 @@
 body {
     background-color: rgb(255, 238, 0);
-    padding-left: 20vh;
-    padding-right: 8em;
-    /* max-width: 60vh; */
-    /* overflow: ; */
+    padding-left: 10vh;
+    /* padding-right: 8em; */
     padding-top: 2em;
     font-family: Arial, Helvetica, sans-serif;
 }

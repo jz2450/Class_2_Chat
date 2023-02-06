@@ -14,14 +14,16 @@ app.get('/', function (req, res) {
 var http = require('http');
 // We pass in the Express object
 var httpServer = http.createServer(app);
-// Listen on port 80
+// Listen on port 80, the default for HTTP
 httpServer.listen(80);
 
 // WebSocket Portion
 // WebSockets work with the HTTP server
+// Using Socket.io
 const { Server } = require('socket.io');
 const io = new Server(httpServer, {});
 
+// Old version of Socket.io
 //var io = require('socket.io').listen(httpServer);
 
 // Register a callback function to run when we have an individual connection
@@ -38,7 +40,7 @@ io.sockets.on('connection',
 			console.log("Received: 'chatmessage' " + data);
 			
 			// Send it to all of the clients
-			socket.emit('chatmessage', data);
+			io.emit('chatmessage', data);
 		});
 		
 		socket.on('disconnect', function() {
